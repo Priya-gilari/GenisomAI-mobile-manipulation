@@ -25,5 +25,44 @@
       </link>
     </model>
 
+    <!-- 10 m x 8 m room: 4 walls -->
+    <model name="room">
+      <static>true</static>
+      <link name="walls">
+        <collision name="north"><pose>0 4 0.5 0 0 0</pose><geometry><box><size>10 0.1 1</size></box></geometry></collision>
+        <visual name="north_v"><pose>0 4 0.5 0 0 0</pose><geometry><box><size>10 0.1 1</size></box></geometry>
+          <material><ambient>0.6 0.5 0.4 1</ambient><diffuse>0.6 0.5 0.4 1</diffuse></material></visual>
+        <collision name="south"><pose>0 -4 0.5 0 0 0</pose><geometry><box><size>10 0.1 1</size></box></geometry></collision>
+        <visual name="south_v"><pose>0 -4 0.5 0 0 0</pose><geometry><box><size>10 0.1 1</size></box></geometry>
+          <material><ambient>0.6 0.5 0.4 1</ambient><diffuse>0.6 0.5 0.4 1</diffuse></material></visual>
+        <collision name="east"><pose>5 0 0.5 0 0 0</pose><geometry><box><size>0.1 8 1</size></box></geometry></collision>
+        <visual name="east_v"><pose>5 0 0.5 0 0 0</pose><geometry><box><size>0.1 8 1</size></box></geometry>
+          <material><ambient>0.6 0.5 0.4 1</ambient><diffuse>0.6 0.5 0.4 1</diffuse></material></visual>
+        <collision name="west"><pose>-5 0 0.5 0 0 0</pose><geometry><box><size>0.1 8 1</size></box></geometry></collision>
+        <visual name="west_v"><pose>-5 0 0.5 0 0 0</pose><geometry><box><size>0.1 8 1</size></box></geometry>
+          <material><ambient>0.6 0.5 0.4 1</ambient><diffuse>0.6 0.5 0.4 1</diffuse></material></visual>
+        <!-- inner wall with a gap -->
+        <collision name="inner"><pose>1.5 1.5 0.5 0 0 0</pose><geometry><box><size>0.1 5 1</size></box></geometry></collision>
+        <visual name="inner_v"><pose>1.5 1.5 0.5 0 0 0</pose><geometry><box><size>0.1 5 1</size></box></geometry>
+          <material><ambient>0.6 0.5 0.4 1</ambient><diffuse>0.6 0.5 0.4 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <!-- obstacles -->
+    <model name="box1"><static>true</static><pose>-2.5 1.5 0.3 0 0 0</pose>
+      <link name="l"><collision name="c"><geometry><box><size>0.6 0.6 0.6</size></box></geometry></collision>
+      <visual name="v"><geometry><box><size>0.6 0.6 0.6</size></box></geometry>
+        <material><ambient>0.2 0.4 0.8 1</ambient><diffuse>0.2 0.4 0.8 1</diffuse></material></visual></link></model>
+
+    <model name="box2"><static>true</static><pose>3.2 -2 0.4 0 0 0.5</pose>
+      <link name="l"><collision name="c"><geometry><box><size>1.0 0.5 0.8</size></box></geometry></collision>
+      <visual name="v"><geometry><box><size>1.0 0.5 0.8</size></box></geometry>
+        <material><ambient>0.8 0.3 0.2 1</ambient><diffuse>0.8 0.3 0.2 1</diffuse></material></visual></link></model>
+
+    <model name="pillar"><static>true</static><pose>-1 -2 0.5 0 0 0</pose>
+      <link name="l"><collision name="c"><geometry><cylinder><radius>0.25</radius><length>1</length></cylinder></geometry></collision>
+      <visual name="v"><geometry><cylinder><radius>0.25</radius><length>1</length></cylinder></geometry>
+        <material><ambient>0.3 0.7 0.3 1</ambient><diffuse>0.3 0.7 0.3 1</diffuse></material></visual></link></model>
+
   </world>
 </sdf>

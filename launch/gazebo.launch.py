@@ -27,7 +27,7 @@ def generate_launch_description():
 
     # spawn at standing height (wheel centre 0.288 m below hip + wheel radius 0.070 m)
     spawn = Node(package='gazebo_ros', executable='spawn_entity.py',
-                 arguments=['-topic', 'robot_description', '-entity', 'zsl1w', '-z', '0.37'],
+                 arguments=['-topic', 'robot_description', '-entity', 'zsl1w', '-x', '-3.5', '-y', '-0.5', '-z', '0.37'],
                  output='screen')
 
     def spawner(name):
