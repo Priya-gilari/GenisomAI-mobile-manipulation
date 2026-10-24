@@ -1,0 +1,52 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 500
+    use_sim_time: true
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+    leg_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+    diff_drive_controller:
+      type: diff_drive_controller/DiffDriveController
+
+leg_controller:
+  ros__parameters:
+    joints: [FBL_ABAD_JOINT, FBL_HIP_JOINT, FBL_KNEE_JOINT,
+             FAR_ABAD_JOINT, FAR_HIP_JOINT, FAR_KNEE_JOINT,
+             RAR_ABAD_JOINT, RAR_HIP_JOINT, RAR_KNEE_JOINT,
+             RBL_ABAD_JOINT, RBL_HIP_JOINT, RBL_KNEE_JOINT]
+    command_interfaces: [effort]
+    state_interfaces: [position, velocity]
+    allow_partial_joints_goal: false
+    gains:
+      FBL_ABAD_JOINT: {p: 100.0, d: 2.0, i: 0.0}
+      FBL_HIP_JOINT:  {p: 150.0, d: 3.0, i: 0.0}
+      FBL_KNEE_JOINT: {p: 150.0, d: 3.0, i: 0.0}
+      FAR_ABAD_JOINT: {p: 100.0, d: 2.0, i: 0.0}
+      FAR_HIP_JOINT:  {p: 150.0, d: 3.0, i: 0.0}
+      FAR_KNEE_JOINT: {p: 150.0, d: 3.0, i: 0.0}
+      RAR_ABAD_JOINT: {p: 100.0, d: 2.0, i: 0.0}
+      RAR_HIP_JOINT:  {p: 150.0, d: 3.0, i: 0.0}
+      RAR_KNEE_JOINT: {p: 150.0, d: 3.0, i: 0.0}
+      RBL_ABAD_JOINT: {p: 100.0, d: 2.0, i: 0.0}
+      RBL_HIP_JOINT:  {p: 150.0, d: 3.0, i: 0.0}
+      RBL_KNEE_JOINT: {p: 150.0, d: 3.0, i: 0.0}
+
+diff_drive_controller:
+  ros__parameters:
+    left_wheel_names:  ["FBL_FOOT_JOINT", "RBL_FOOT_JOINT"]
+    right_wheel_names: ["FAR_FOOT_JOINT", "RAR_FOOT_JOINT"]
+    wheel_separation: 0.319
+    wheel_radius: 0.0704
+    base_frame_id: BASE_LINK
+    odom_frame_id: odom
+    enable_odom_tf: true
+    use_stamped_vel: false
+    cmd_vel_timeout: 0.5
+    publish_rate: 50.0
+    linear.x.has_velocity_limits: true
+    linear.x.max_velocity: 1.0
+    linear.x.min_velocity: -1.0
+    angular.z.has_velocity_limits: true
+    angular.z.max_velocity: 2.0
+    angular.z.min_velocity: -2.0
