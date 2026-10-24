@@ -66,3 +66,11 @@ ros2 control list_controllers
 | Motor limits | 28 Nm, 28 rad/s |
 
 ## Package structure
+zsl1w_description/
+├── urdf/
+│ ├── ZSL-1W.urdf # robot model (cleaned up from manufacturer URDF)
+│ └── zsl1w_gazebo.urdf.xacro # + ros2_control interfaces, Gazebo plugin, wheel friction
+├── meshes/ # STL meshes
+├── config/controllers.yaml # leg PD gains, diff-drive parameters
+├── launch/gazebo.launch.py # Gazebo, spawn, controllers, stand-up sequence
+└── worlds/flat.world # ground plane + lighting
