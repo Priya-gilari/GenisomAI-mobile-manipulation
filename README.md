@@ -13,6 +13,10 @@ as the mobile base for an autonomous mobile-manipulation project (ZSL-1W + Agile
 - **Wheels (4 joints):** skid-steer driving via `diff_drive_controller`, publishes odometry and TF
 - Keyboard teleoperation with `teleop_twist_keyboard`
 - Self-contained Gazebo world (no online model database needed)
+- 2D LiDAR (360°, 10 Hz, 12 m range) via Gazebo ray sensor → `/scan`
+- Test room world with walls and obstacles for mapping
+- SLAM Toolbox (online async) mapping
+- Ground-truth odometry in simulation (`gt_odom.py`): TF `odom → BASE_LINK` and `/odom`
 
 ## System
 | Component | Version |
@@ -51,6 +55,17 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard \
 ```bash
 ros2 control list_controllers
 ```
+**Mapping with SLAM Toolbox** (after the simulation is running)
+```bash
+ros2 launch slam_toolbox online_async_launch.py \
+  slam_params_file:=$HOME/dog_ws/install/zsl1w_description/share/zsl1w_description/config/slam.yaml \
+  use_sim_time:=true
+rviz2 -d ~/dog_ws/src/zsl1w_description/config/slam.rviz --ros-args -p use_sim_time:=true
+```
+Save the map:
+```bash
+ros2 run nav2_map_server map_saver_cli -f maps/room --ros-args -p use_sim_time:=true
+```
 
 ## Robot parameters
 | Parameter | Value |
@@ -73,6 +88,11 @@ zsl1w_description/
 ├── config/controllers.yaml # leg PD gains, diff-drive parameters
 ├── launch/gazebo.launch.py # Gazebo, spawn, controllers, stand-up sequence
 └── worlds/flat.world # ground plane + lighting
+├── config/slam.yaml             # SLAM Toolbox parameters
+├── config/slam.rviz             # RViz layout for mapping
+├── scripts/gt_odom.py           # ground truth → odometry (TF + /odom)
+├── worlds/flat.world            # test room with walls and obstacles
+└── maps/                        # saved maps (room.pgm, room.yaml)
 ```
 
 ## How it works
@@ -95,11 +115,19 @@ The wheels are activated only after standing up, so they can roll freely while t
 | Robot launched into the air | Position interface in Gazebo *teleports* joints into contact | Effort interface + PD control (`joint_trajectory_controller`) |
 | Robot flipped during stand-up | Legs limp before controller start; locked wheels levered the body | Spawn at standing height, legs first, wheels after stand-up |
 | Wheel collisions dropped by Gazebo | Mesh collisions lost in URDF→SDF conversion | Replaced with cylinder primitives |
+| SLAM used wrong base frame (`base_footprint`) | `slam.yaml` was missing, defaults were used | Created config with `base_frame: BASE_LINK` |
+| `TF_OLD_DATA`, no map | SLAM/RViz kept running after Gazebo restart (sim clock reset) | Restart all nodes together with Gazebo |
+| Map duplicated, rotated, offset by ~15 m | 4-wheel skid steering slips → wheel odometry drifted metres | Gazebo ground truth (P3D) as odometry in simulation |
+| Robot tipped when stopping/turning | Unlimited acceleration on a tall skid-steer robot | Velocity and acceleration limits in `diff_drive_controller` |
+> **Note on odometry:** In simulation, odometry comes from Gazebo ground truth, because
+> 4-wheel skid steering makes raw wheel odometry unreliable. On the real robot this will be
+> replaced by the robot's state estimator or an IMU + wheel EKF (`robot_localization`).
 
 ## Roadmap
 - [x] Robot description and Gazebo simulation
 - [x] Standing and teleoperation
-- [ ] 2D LiDAR + SLAM Toolbox mapping
+- [x] 2D LiDAR + test room
+- [x] SLAM Toolbox mapping
 - [ ] Nav2 autonomous navigation with obstacle avoidance
 - [ ] Mount AgileX Piper arm (MoveIt 2): retract / extend / scan poses
 - [ ] Mission node: navigate → stop → arm scan → retract → repeat
