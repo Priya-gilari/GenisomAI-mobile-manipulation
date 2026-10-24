@@ -1,6 +1,4 @@
-cd ~/dog_ws/src/zsl1w_description
-mkdir -p docs
-cat > README.md << 'EOF'
+
 # ZSL-1W Wheel-Legged Robot — ROS 2 Gazebo Simulation
 
 ![ZSL-1W driving in Gazebo](docs/drive.gif)
@@ -67,6 +65,7 @@ ros2 control list_controllers
 
 ## Package structure
 zsl1w_description/
+```
 ├── urdf/
 │ ├── ZSL-1W.urdf # robot model (cleaned up from manufacturer URDF)
 │ └── zsl1w_gazebo.urdf.xacro # + ros2_control interfaces, Gazebo plugin, wheel friction
@@ -74,3 +73,4 @@ zsl1w_description/
 ├── config/controllers.yaml # leg PD gains, diff-drive parameters
 ├── launch/gazebo.launch.py # Gazebo, spawn, controllers, stand-up sequence
 └── worlds/flat.world # ground plane + lighting
+```
