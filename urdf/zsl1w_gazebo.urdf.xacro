@@ -95,4 +95,15 @@
       </plugin>
     </sensor>
   </gazebo>
+
+  <!-- ===== ground-truth pose from Gazebo (used as odometry in simulation) ===== -->
+  <gazebo>
+    <plugin name="ground_truth" filename="libgazebo_ros_p3d.so">
+      <ros><remapping>odom:=ground_truth</remapping></ros>
+      <body_name>BASE_LINK</body_name>
+      <frame_name>world</frame_name>
+      <update_rate>50</update_rate>
+      <gaussian_noise>0.0</gaussian_noise>
+    </plugin>
+  </gazebo>
 </robot>

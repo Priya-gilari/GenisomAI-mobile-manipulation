@@ -26,6 +26,9 @@ def generate_launch_description():
                output='screen')
 
     # spawn at standing height (wheel centre 0.288 m below hip + wheel radius 0.070 m)
+    gt_odom = Node(package='zsl1w_description', executable='gt_odom.py',
+                   parameters=[{'use_sim_time': True}], output='screen')
+
     spawn = Node(package='gazebo_ros', executable='spawn_entity.py',
                  arguments=['-topic', 'robot_description', '-entity', 'zsl1w', '-x', '-3.5', '-y', '-0.5', '-z', '0.37'],
                  output='screen')
@@ -50,7 +53,7 @@ def generate_launch_description():
                            output='screen')
 
     return LaunchDescription([
-        model_path, gazebo, rsp, spawn,
+        model_path, gazebo, rsp, gt_odom, spawn,
         # 1) right after spawning: leg motors first, then joint states
         RegisterEventHandler(OnProcessExit(target_action=spawn, on_exit=[legs, jsb])),
         # 2) leg controller active -> stand up (2 s)
